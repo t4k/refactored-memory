@@ -1,4 +1,5 @@
 name: Workflow with Validation and Manual Approval
+run-name: ${{ github.event.inputs.identifier }} Workflow
 
 on:
   workflow_dispatch:
