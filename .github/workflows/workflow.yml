@@ -1,6 +1,11 @@
 name: Workflow with Validation and Manual Approval
 
-on: [push]
+on:
+  workflow_dispatch:
+    inputs:
+      identifier:
+        type: string
+        required: true
 
 jobs:
   workflow:
@@ -13,11 +18,8 @@ jobs:
       - id: validation
         run: |
           # Add your validation commands here
-          title="some title text"
           body="some body text"
-          echo "some_title_text=$title" >> $GITHUB_OUTPUT
           echo "some_body_text=$body" >> $GITHUB_OUTPUT
-          echo "OUTPUT key: some_title_text; value: $title"
           echo "OUTPUT key: some_body_text; value: $body"
 
       - uses: trstringer/manual-approval@v1
@@ -25,7 +27,7 @@ jobs:
           secret: ${{ github.TOKEN }}
           approvers: ${{ github.actor }}
           minimum-approvals: 1
-          issue-title: ${{ steps.validation.outputs.some_title_text }}
+          issue-title: ${{ inputs.identifier }}
           issue-body: ${{ steps.validation.outputs.some_body_text }}
           exclude-workflow-initiator-as-approver: false
           additional-approved-words: 'continue, ok'
